@@ -2,24 +2,24 @@ import cv2 as cv
 import os
 import numpy as np
 import math
-from skimage.feature import greycomatrix, greycoprops
+from skimage.feature import graycomatrix, graycoprops
 import matplotlib.pyplot as plt
 import pandas as pd
 
 def calcEnergy(glcm):
-	return greycoprops(glcm, 'energy')[0, 0]
+	return graycoprops(glcm, 'energy')[0, 0]
 
 def calcContrast(glcm):
-	return greycoprops(glcm, 'contrast')[0, 0]
+	return graycoprops(glcm, 'contrast')[0, 0]
 
 def calcHomogeneity(glcm):
-	return greycoprops(glcm, 'homogeneity')[0, 0]
+	return graycoprops(glcm, 'homogeneity')[0, 0]
 
 def calcCorrelation(glcm):
-	return greycoprops(glcm, 'correlation')[0, 0]
+	return graycoprops(glcm, 'correlation')[0, 0]
 
 def calcGLCM(gray, theta = 0, dist = 5):
-	return greycomatrix(gray, distances=[dist], angles=[theta], levels= 256, symmetric=True, normed=True)
+	return graycomatrix(gray, distances=[dist], angles=[theta], levels= 256, symmetric=True, normed=True)
 
 def openImagesFromFolder(folder):
 
@@ -213,14 +213,14 @@ for d in range(0,2):
 names, imgs = openImagesFromFolder("spec/imgTexture")
 dts = calcDescripteurTexture(imgs)
 
+fig = plt.figure(figsize = (13,7))
+columns = 2
+rows = 2
 for nk in range (2, 6):
 
 	markers, klass = nuee_dynamique( dts[:,:2], k = nk )
-
-	fig = plt.figure(figsize = (7,7))
-	columns = 1
-	rows = 1
-	ax = fig.add_subplot(1, 1, 1)
+	
+	ax = fig.add_subplot(rows, columns, nk-1)
 	ax.set_xlabel('energy')
 	ax.set_ylabel('contrast')
 	ax.autoscale(False)
@@ -254,8 +254,8 @@ for nk in range (2, 6):
 	plt.title(f"Energy and Contrast Based Dynamic Clustering (n={nk})")
 	plt.gca().set_facecolor((0.2, 0.2, 0.2))
 
-	plt.subplots_adjust(bottom=0.15, left=0.15, right=0.90, top=0.90, wspace = 0.25, hspace = 0.25)
-	plt.show()
+plt.subplots_adjust(bottom=0.15, left=0.15, right=0.90, top=0.90, wspace = 0.25, hspace = 0.25)
+plt.show()
 
 
 #Nuee Dynamique (3D descriptor (Energy, Contrast, correlation))
@@ -366,14 +366,13 @@ plt.show()
 names, imgs = openImagesFromFolder("spec/imgCouleur")
 dts = calcDescripteurColorYCbCr(imgs)
 
+fig = plt.figure(figsize = (13,7))
+columns = 2
+rows = 2
 for nk in range (2, 6):
 
 	markers, klass = nuee_dynamique( dts[:,1:], k = nk )
-
-	fig = plt.figure(figsize = (7,7))
-	columns = 1
-	rows = 1
-	ax = fig.add_subplot(1, 1, 1)
+	ax = fig.add_subplot(rows, columns, nk-1)
 	ax.set_xlabel('Cb')
 	ax.set_ylabel('Cr')
 	ax.autoscale(False)
@@ -407,8 +406,8 @@ for nk in range (2, 6):
 	plt.title(f"Cb, Cr Based Dynamic Clustering (n={nk})")
 	plt.gca().set_facecolor((0.2, 0.2, 0.2))
 
-	plt.subplots_adjust(bottom=0.15, left=0.15, right=0.90, top=0.90, wspace = 0.25, hspace = 0.25)
-	plt.show()
+plt.subplots_adjust(bottom=0.15, left=0.15, right=0.90, top=0.90, wspace = 0.275, hspace = 0.275)
+plt.show()
 
 
 #Nuee Dynamique (3D descriptor (R,G,B))
@@ -465,3 +464,4 @@ plt.gca().set_facecolor((0.8, 0.8, 0.8))
 
 plt.subplots_adjust(bottom=0.15, left=0.15, right=0.90, top=0.90, wspace = 0.25, hspace = 0.25)
 plt.show()
+
